@@ -20,6 +20,7 @@ set incsearch
 
 set autoindent
 set autochdir
+set termguicolors
 autocmd FileType json setlocal ts=2 sts=2 sw=2
 
 function GitDiff()
@@ -28,11 +29,11 @@ function GitDiff()
     :redraw!
 endfunction
 
+let mapleader = ","
 nnoremap <leader>gd :call GitDiff()<cr>
 nnoremap <F9> :Black<CR>
-noremap <Leader>y "+y
-noremap <Leader>p "+p
-let g:airline_theme='onedark'
+noremap <leader>y "+y
+noremap <leader>p "+p
 let g:black_linelength="79"
 
 " Install vimplug
@@ -45,9 +46,13 @@ endif
 " Vim plugins
 call plug#begin('~/.vim/plugged')
 
+Plug 'catppuccin/vim', { 'as': 'catppuccin' }
 Plug 'preservim/nerdtree'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ambv/black'
 
 call plug#end()
+
+colorscheme catppuccin_mocha
+hi Normal guibg=NONE ctermbg=NONE
