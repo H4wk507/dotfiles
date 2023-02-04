@@ -1,0 +1,5 @@
+ Host vm
+     User user
+     HostName localhost
+     Port 2222
+     IdentityFile ~/.ssh/id_ed25519
