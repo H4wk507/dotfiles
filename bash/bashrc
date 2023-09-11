@@ -58,7 +58,7 @@ esac
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
+    alias ls='ls -hN --color=auto --group-directories-first'
     alias dir='dir --color=auto'
     alias vdir='vdir --color=auto'
 
@@ -69,11 +69,6 @@ fi
 
 # colored GCC warnings and errors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
 
 # You may want to put all your aliases into a separate file like ~/.bash_aliases
 if [ -f ~/.bash_aliases ]; then
@@ -121,3 +116,5 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+
+PATH=~/.console-ninja/.bin:$PATH

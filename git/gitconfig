@@ -7,7 +7,7 @@
 [commit]
 	gpgsign = true
 [diff]
-	tool = vimdiff
+	tool = nvimdiff
 [difftool]
 	prompt = false
 [oh-my-zsh]
