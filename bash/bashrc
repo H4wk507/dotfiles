@@ -118,3 +118,10 @@ unset __conda_setup
 
 
 PATH=~/.console-ninja/.bin:$PATH
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH=$BUN_INSTALL/bin:$PATH
+
+# add Pulumi to the PATH
+export PATH=$PATH:$HOME/.pulumi/bin
