@@ -10,11 +10,22 @@
 	tool = nvimdiff
 [difftool]
 	prompt = false
+    colorMoved = default
 [oh-my-zsh]
 	hide-dirty = 1
 [core]
 	editor = vim
+	pager = delta
+[interactive]
+    diffFilter = delta --color-only
+[delta]
+    navigate = true
+    light = false
+    side-by-side = true
 [merge]
 	tool = vimdiff
+	conflictStyle = zdiff3
 [alias]
 	graph = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+[push]
+	autosetupremote = true
