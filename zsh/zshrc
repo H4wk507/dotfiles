@@ -58,7 +58,8 @@ alias \
     nb='newsboat' \
     e='$EDITOR' \
     v='nvim' \
-    c='code'
+    c='code' \
+    fz='nvim $(fzf)'
 
 # Autocompletion menu
 zstyle ':completion:*' menu yes select
