@@ -38,6 +38,59 @@ unsetopt nomatch
 
 bindkey -v
 
+# Functions
+
+# List packages
+# Usage: qi [package] or qi to list all packages
+function qi() {
+    (
+        type dpkg-query &> /dev/null && dpkg-query -W -f '${db:Status-Abbrev} ${Package} ${Version}\n'
+        type snap &> /dev/null && snap list | sed -e '/^Name/d' -e 's/^/snap /'
+    ) | awk -v argline="$*" 'BEGIN { split(argline, fwords, / +/) }
+        function include(package) {
+            for (i in fwords) {
+                if (index(package, tolower(fwords[i])) == 0) {
+                    return 0
+                }
+            }
+            return 1
+        }
+        /^ii/ && include($2 $3) {
+            printf("%-30s %s\n", $2, $3)
+        }
+        /^snap/ && include($2 $3 "[snap]") {
+            printf("%-30s %-20s [snap]\n", $2, $3)
+        }'
+}
+
+function big-files() {
+    if [ "$2" = "gib" ]; then
+        factor=$((1024 * 1024 * 1024))
+        pf='GiB'
+    else
+        factor=$((1024 * 1024))
+        pf='MiB'
+    fi
+    find "${1:-.}" -type f -printf '%s\t%P\n' |
+        sort -nr -k1 |
+        awk -F\\t -v factor=$factor -v pf=$pf '{ printf("%.2f %s\t%s\n", $1/factor, pf, $2); }'
+}
+
+function big-dirs() {
+    if [ "$2" = "gib" ]; then
+        factor=$((1024 * 1024 * 1024))
+        pf='GiB'
+    else
+        factor=$((1024 * 1024))
+        pf='MiB'
+    fi
+    find "${1-.}" -maxdepth 1 -mindepth 1 -type d -print0 |
+        xargs -0 du -bs |
+        sort -nr -k1 |
+        awk -F\\t -v factor=$factor -v pf=$pf '{ printf("%.2f %s\t%s\n", $1/factor, pf, $2); }'
+}
+
+
 # Aliases
 alias \
     cp='cp -iv' \
