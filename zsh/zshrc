@@ -18,7 +18,7 @@ ZSH_THEME="eastwood"
 DISABLE_AUTO_TITLE="false"
 
 source ~/.zsh/catppuccin_mocha-zsh-syntax-highlighting.zsh
-plugins=(git python zsh-autosuggestions zsh-syntax-highlighting)
+plugins=(git python zsh-autosuggestions zsh-syntax-highlighting you-should-use)
 
 # History settings
 HISTFILE=~/.histfile
@@ -115,7 +115,12 @@ alias \
     e='$EDITOR' \
     v='nvim' \
     c='code' \
-    fz='nvim $(fzf)'
+    fz='nvim $(fzf)' \
+    t='tmux'
+
+alias \
+    encrypt-file='gpg -c --no-symkey-cache --pinentry-mode=loopback' \
+    decrypt-file='gpg -d --no-symkey-cache --pinentry-mode=loopback'
 
 # Autocompletion menu
 zstyle ':completion:*' menu yes select
