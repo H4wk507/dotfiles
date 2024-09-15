@@ -10,7 +10,8 @@ lsp.on_attach(function(client, bufnr)
 end)
 
 
-lsp.setup_servers({'tsserver', 'eslint'})
+-- TODO: use ts_ls
+-- lsp.setup_servers({'tsserver', 'eslint'})
 
 -- (Optional) Configure lua language server for neovim
 local lspconfig = require('lspconfig');
