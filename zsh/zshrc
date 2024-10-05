@@ -90,6 +90,16 @@ function big-dirs() {
         awk -F\\t -v factor=$factor -v pf=$pf '{ printf("%.2f %s\t%s\n", $1/factor, pf, $2); }'
 }
 
+function muxvideo() {
+    ffmpeg -i "$1" -i "$2" -c:v copy -c:a aac "$3"
+}
+
+# Align envs between gdb and shell to prevent stack misalignment
+# NOTE: unset LINES and COLUMNS envs inside gdb
+# Usage: align-envs gdb ./main -q
+function align-envs() {
+    env -i PWD="$(pwd)" SHELL="/bin/bash" SHLVL=0 "$@"
+}
 
 # Aliases
 alias \
