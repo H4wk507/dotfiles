@@ -13,6 +13,10 @@ export ANDROID_HOME="$HOME/Android/Sdk"
 export PATH="$PATH:$ANDROID_HOME/emulator"
 export PATH="$PATH:$ANDROID_HOME/platform-tools"
 
+# Prevent pressing touchpad while typing (5.15.0-48-generic)
+synclient MaxTapTime=0
+synclient PalmDetect=1
+
 ZSH_THEME="eastwood"
 
 DISABLE_AUTO_TITLE="false"
