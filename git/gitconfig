@@ -1,11 +1,8 @@
 [user]
 	email = piotr.skowronski@gorrion.io
 	name = Piotr Skowroński
-	signingkey = 371F90390192C8D9
 [init]
 	defaultBranch = main
-[commit]
-	gpgsign = true
 [diff]
 	tool = nvimdiff
 [difftool]
