@@ -1,5 +1,13 @@
- Host vm
-     User user
-     HostName localhost
-     Port 2222
-     IdentityFile ~/.ssh/id_ed25519
+Host vm vmroot
+    HostName localhost
+    Port 2222
+    IdentityFile ~/.ssh/id_ed25519
+    KexAlgorithms +diffie-hellman-group1-sha1
+    HostKeyAlgorithms +ssh-rsa
+    Ciphers +aes128-cbc
+
+Host vm
+    User user
+
+Host vmroot
+    User root

@@ -1,7 +1,7 @@
 [user]
-	email = quasand89@gmail.com
-	name = H4wk
-	signingkey = 493F5D6C264A676C
+	email = piotr.skowronski@gorrion.io
+	name = Piotr Skowroński
+	signingkey = 371F90390192C8D9
 [init]
 	defaultBranch = main
 [commit]
@@ -29,3 +29,5 @@
 	graph = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 [push]
 	autosetupremote = true
+[credential]
+	helper = store
