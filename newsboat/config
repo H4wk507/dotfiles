@@ -1,0 +1,33 @@
+bind-key j down
+bind-key k up
+bind-key j next articlelist
+bind-key k prev articlelist
+bind-key J next-feed articlelist
+bind-key K prev-feed articlelist
+bind-key G end
+bind-key g home
+bind-key n next-unread
+bind-key N prev-unread
+bind-key a toggle-article-read
+
+browser linkhandler
+macro , open-in-browser
+macro v set browser "mpv"; open-in-browser; set browser linkhandler
+
+color background default default
+color listnormal color255 default
+color listfocus color238 color255 standout
+color listnormal_unread color141 default
+color listfocus_unread color238 color141 standout
+color info color141 color236
+
+highlight all "---.*---" yellow
+highlight feedlist ".*(0/0))" black
+highlight article "(^Feed:|^Title:|^Date:|^Link:|^Author:)" cyan default bold
+highlight article "https?://[^ ]+" yellow default
+highlight article "\\[[0-9][0-9]*\\]" magenta default bold
+highlight article "\\[image\\ [0-9]+\\]" green default bold
+highlight article "\\[embedded flash: [0-9][0-9]*\\]" green default bold
+highlight article ":.*\\(link\\)$" cyan default
+highlight article ":.*\\(image\\)$" blue default
+highlight article ":.*\\(embedded flash\\)$" magenta default
