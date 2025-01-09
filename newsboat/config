@@ -13,6 +13,8 @@ bind-key a toggle-article-read
 browser linkhandler
 macro , open-in-browser
 macro v set browser "mpv"; open-in-browser; set browser linkhandler
+macro d set browser "yt-dlp -f bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best -P ~/media"; open-in-browser; set browser linkhandler
+
 
 color background default default
 color listnormal color255 default
