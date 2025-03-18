@@ -5,6 +5,10 @@
 	defaultBranch = main
 [diff]
 	tool = nvimdiff
+	algorithm = histogram
+	renames = true
+	colorMoved = plain
+	mnemonicPrefix = true
 [difftool]
 	prompt = false
     colorMoved = default
@@ -26,5 +30,18 @@
 	graph = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 [push]
 	autosetupremote = true
+	followTags = true
 [credential]
 	helper = store
+[branch]
+	sort = -committerdate
+[column]
+    ui = auto
+[tag]
+	sort = version:refname
+[fetch]
+	prune = true
+	pruneTags = true
+	all = true
+[commit]
+	verbose = true

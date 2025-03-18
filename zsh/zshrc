@@ -5,6 +5,7 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.pulumi/bin:$PATH"
 export PATH="$PATH:/usr/local/go/bin"
 export PATH="$PATH:/opt"
+export PATH="$PATH:/usr/bin"
 export PATH="$HOME/go/bin:$PATH"
 export ZSH="$HOME/.oh-my-zsh"
 export GOPATH="$HOME/smieci.go"
@@ -167,3 +168,8 @@ case ":$PATH:" in
 esac
 
 PATH=~/.console-ninja/.bin:$PATH
+
+eval "$(zoxide init zsh)"
+
+# bun completions
+[ -s "/home/hxwk/.bun/_bun" ] && source "/home/hxwk/.bun/_bun"
