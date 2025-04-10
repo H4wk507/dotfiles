@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -e
+
+git clone --depth 1 --branch v0.10.4 https://github.com/neovim/neovim.git $HOME/neovim-github
+sudo apt install -y make cmake ninja-build gettext lua5.1 liblua5.1-0-dev
+
+cd $HOME/neovim-github
+make CMAKE_BUILD_TYPE=RelWithDebInfo
+sudo make install
+
+rm -rf $HOME/neovim-github
