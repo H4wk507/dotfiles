@@ -1,0 +1,57 @@
+#!/bin/sh
+
+set -eu
+
+[ "$(id -u)" -eq 0 ] || { echo "This script must be run as root."; exit 1; }
+
+APPDIR="/opt/cursor"
+APPIMAGE_URL="https://downloader.cursor.sh/linux/appImage/x64"
+UPDATE_SCRIPT="/usr/local/bin/update-cursor"
+
+sudo apt install dbus-x11
+eval "$(dbus-launch --sh-syntax)"
+
+sudo mkdir -p "$APPDIR"
+wget -O "$APPDIR/cursor.AppImage" "$APPIMAGE_URL"
+chmod +x "$APPDIR/cursor.AppImage"
+cp "cursor.png" "$APPDIR"
+ln -sf "$APPDIR/cursor.AppImage" /usr/local/bin/cursor
+
+mkdir -p "$HOME/.local/share/applications"
+cat > "$HOME/.local/share/applications/cursor.desktop" << EOF
+[Desktop Entry]
+Name=Cursor
+Comment=IDE
+Exec=/opt/cursor/cursor.AppImage --no-sandbox
+Icon=/opt/cursor/cursor.png
+Type=Application
+Categories=Utility;Development;
+EOF
+
+cat > "$UPDATE_SCRIPT" << 'EOF'
+#!/bin/sh
+
+APPDIR="/opt/cursor"
+APPIMAGE_URL="https://downloader.cursor.sh/linux/appImage/x64"
+
+wget -O "$APPDIR/cursor.AppImage" "$APPIMAGE_URL"
+chmod +x "$APPDIR/cursor.AppImage"
+EOF
+
+chmod +x "$UPDATE_SCRIPT"
+
+sudo mkdir -p /etc/systemd/system
+cat > "/etc/systemd/system/update-cursor.service" << EOF
+[Unit]
+Description=Update Cursor
+
+[Service]
+ExecStart=/usr/local/bin/update-cursor
+Type=oneshot
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl enable update-cursor.service
+sudo systemctl start update-cursor.service

@@ -14,9 +14,9 @@ end)
 -- lsp.setup_servers({'tsserver', 'eslint'})
 
 -- (Optional) Configure lua language server for neovim
-local lspconfig = require('lspconfig');
+-- local lspconfig = require('lspconfig');
 
-lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
+-- lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
 
-lspconfig.tailwindcss.setup{}
-lsp.setup()
+-- lspconfig.tailwindcss.setup{}
+-- lsp.setup()
