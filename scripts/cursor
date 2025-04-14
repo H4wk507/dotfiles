@@ -1,59 +1,54 @@
 #!/bin/sh
 
-# TODO: currently this does not get latest cursor version :(
-
 set -eu
 
-[ "$(id -u)" -eq 0 ] || { echo "This script must be run as root."; exit 1; }
+sudo apt install -y dbus-x11 libfuse2 jq
 
-APPDIR="/opt/cursor"
-APPIMAGE_URL="https://downloader.cursor.sh/linux/appImage/x64"
-UPDATE_SCRIPT="/usr/local/bin/update-cursor"
+APPDIR="$HOME/.local/opt/cursor"
+APPIMAGE_URL=$(curl -sL https://www.cursor.com/api/download\?platform\=linux-x64\&releaseTrack\=stable | jq -r '.downloadUrl')
+UPDATE_SCRIPT="$HOME/.local/bin/update-cursor"
 
-sudo apt install dbus-x11
-eval "$(dbus-launch --sh-syntax)"
+dbus-launch --sh-syntax > /dev/null 2>&1 || true
 
-sudo mkdir -p "$APPDIR"
+mkdir -p "$APPDIR"
 wget -O "$APPDIR/cursor.AppImage" "$APPIMAGE_URL"
 chmod +x "$APPDIR/cursor.AppImage"
 cp "cursor.png" "$APPDIR"
-ln -sf "$APPDIR/cursor.AppImage" /usr/local/bin/cursor
+ln -sf "$APPDIR/cursor.AppImage" "$HOME/.local/bin/cursor"
 
 mkdir -p "$HOME/.local/share/applications"
 cat > "$HOME/.local/share/applications/cursor.desktop" << EOF
 [Desktop Entry]
-Name=Cursor
-Comment=IDE
-Exec=/opt/cursor/cursor.AppImage --no-sandbox
-Icon=/opt/cursor/cursor.png
 Type=Application
-Categories=Utility;Development;
+Name=Cursor
+Exec=$APPDIR/cursor.AppImage --no-sandbox
+Icon=$APPDIR/cursor.png
 EOF
 
 cat > "$UPDATE_SCRIPT" << 'EOF'
 #!/bin/sh
 
-APPDIR="/opt/cursor"
-APPIMAGE_URL="https://downloader.cursor.sh/linux/appImage/x64"
+APPDIR="$HOME/.local/opt/cursor"
+APPIMAGE_URL=$(curl -sL https://www.cursor.com/api/download\?platform\=linux-x64\&releaseTrack\=stable | jq -r '.downloadUrl')
 
-wget -O "$APPDIR/cursor.AppImage" "$APPIMAGE_URL"
-chmod +x "$APPDIR/cursor.AppImage"
+wget -O $APPDIR/cursor.AppImage $APPIMAGE_URL
+chmod +x $APPDIR/cursor.AppImage
 EOF
 
 chmod +x "$UPDATE_SCRIPT"
 
-sudo mkdir -p /etc/systemd/system
-cat > "/etc/systemd/system/update-cursor.service" << EOF
+mkdir -p "$HOME/.config/systemd/user"
+cat > "$HOME/.config/systemd/user/update-cursor.service" << EOF
 [Unit]
 Description=Update Cursor
 
 [Service]
-ExecStart=/usr/local/bin/update-cursor
+ExecStart=$UPDATE_SCRIPT
 Type=oneshot
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
 EOF
 
-sudo systemctl enable update-cursor.service
-sudo systemctl start update-cursor.service
+systemctl --user enable update-cursor.service
+systemctl --user start update-cursor.service
