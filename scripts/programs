@@ -10,14 +10,33 @@ vscode
 cursor
 tmux
 newsboat
-n (node)
 qbittorrent
 yt-dlp
 ffmpeg
 brave
 mpv
+
 thunderbird
 ghidra
+golang
+docker
+gimp
+clion
+signal
+rg
+fd
+fzf
+
+job:
+pnpm
+fnm
+bun
+stripe CLI
+datagrip
+supabase
+slack
+pulumi
 github cli
+postman
 
 what about ssh keys?

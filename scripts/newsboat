@@ -1,0 +1,13 @@
+#!/bin/sh
+
+sudo apt install rustup
+rustup update stable
+sudo apt install libstfl0 libstfl-dev
+
+git clone --depth 1 --branch r2.39 git@github.com:newsboat/newsboat.git "$HOME/newsboat-github"
+
+cd "$HOME/newsboat-github"
+make -j$(nproc)
+sudo make install
+
+rm -rf "$HOME/newsboat-github"

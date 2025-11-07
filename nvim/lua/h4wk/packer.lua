@@ -13,6 +13,14 @@ return require('packer').startup(function(use)
 	  requires = { {'nvim-lua/plenary.nvim'} }
   }
 
+--  use {
+--    'm4xshen/hardtime.nvim',
+--    requires = { 'MunifTanjim/nui.nvim', 'nvim-lua/plenary.nvim' },
+--    config = function()
+--        require('hardtime').setup()
+--    end
+--  }
+
   use({
       "catppuccin/nvim",
       as = "catppuccin",

@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# TODO: install via apt when it becomes available
+
+set -eu
+
+ARCHIVE="zig-linux-x86_64-0.14.0.tar.xz"
+EXTRACT_DIR="zig-linux-x86_64-0.14.0"
+
+wget -O "$ARCHIVE" "https://ziglang.org/download/0.14.0/zig-linux-x86_64-0.14.0.tar.xz" 
+tar xf "$ARCHIVE"
+
+mkdir -p "$HOME/.local/lib/zig"
+mv "$EXTRACT_DIR/zig" "$HOME/.local/bin/zig"
+mv "$EXTRACT_DIR"/lib/* "$HOME/.local/lib/zig"
+rm -rf "$EXTRACT_DIR" "$ARCHIVE"
