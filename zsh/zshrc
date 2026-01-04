@@ -176,3 +176,4 @@ if [ -d "$FNM_PATH" ]; then
   export PATH="/home/hxwk/.local/share/fnm:$PATH"
   eval "`fnm env`"
 fi
+. "/home/hxwk/.deno/env"

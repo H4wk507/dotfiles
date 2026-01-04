@@ -12,9 +12,11 @@ tmux
 newsboat
 qbittorrent
 yt-dlp
+deno (for yt-dlp js solvers)
 ffmpeg
 brave
 mpv
+tailscale (move to headscale)
 
 thunderbird
 ghidra

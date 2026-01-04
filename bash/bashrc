@@ -117,3 +117,4 @@ case ":$PATH:" in
 esac
 # pnpm end
 
+. "/home/hxwk/.deno/env"
