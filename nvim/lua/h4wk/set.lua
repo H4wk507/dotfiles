@@ -24,3 +24,7 @@ vim.opt.colorcolumn = "80"
 vim.g.mapleader = ","
 vim.api.nvim_set_option("clipboard", "unnamed")
 vim.g.black_linelength = 79
+
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_ruby_provider = 0
