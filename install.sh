@@ -5,6 +5,8 @@ git pull origin main
 basedir=$(dirname "$0")
 cd "$basedir" || { echo "Could not cd to $basedir" >&2; exit 1; }
 
+mkdir -p "$HOME/.agents" 
+
 # Create symlinks from HOME directory to dotfiles directory
 ln -svn "$PWD/bash/bashrc"    "$HOME/.bashrc"
 ln -svn "$PWD/bash/profile"   "$HOME/.profile"
@@ -17,3 +19,4 @@ ln -svn "$PWD/tmux/tmux.conf" "$HOME/.tmux.conf"
 ln -svn "$PWD/ssh/config"     "$HOME/.ssh/config"
 ln -svn "$PWD/ghostty"        "$HOME/.config/ghostty"
 ln -svn "$PWD/newsboat"       "$HOME/.newsboat"
+ln -svn "$PWD/skills"         "$HOME/.agents/skills"
