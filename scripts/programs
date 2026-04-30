@@ -4,7 +4,6 @@ nvim plugins
 git
 zsh
 zsh plugins
-zig 
 ghostty
 vscode
 cursor
@@ -17,6 +16,10 @@ ffmpeg
 brave
 mpv
 tailscale (move to headscale)
+opencode
+claude-code
+uv
+lm-studio
 
 thunderbird
 ghidra
@@ -32,13 +35,12 @@ fzf
 job:
 pnpm
 fnm
-bun
 stripe CLI
 datagrip
 supabase
 slack
 pulumi
-github cli
 postman
+ngrok
 
 what about ssh keys?

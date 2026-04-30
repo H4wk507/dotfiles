@@ -17,10 +17,6 @@ export LS_COLORS="$(vivid generate snazzy)"
 export XDG_RUNTIME_DIR="/run/user/$(id -u)"
 export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus"
 
-# Prevent pressing touchpad while typing (5.15.0-48-generic)
-# synclient MaxTapTime=0
-# synclient PalmDetect=1
-
 ZSH_THEME="eastwood"
 
 DISABLE_AUTO_TITLE="false"
@@ -164,7 +160,6 @@ case ":$PATH:" in
 esac
 
 
-
 eval "$(zoxide init zsh)"
 
 # bun completions
@@ -176,6 +171,8 @@ if [ -d "$FNM_PATH" ]; then
   export PATH="/home/hxwk/.local/share/fnm:$PATH"
   eval "`fnm env`"
 fi
+
+eval "$(fnm env --use-on-cd --shell zsh)"
 
 . "/home/hxwk/.deno/env"
 
