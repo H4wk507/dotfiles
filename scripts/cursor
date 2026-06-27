@@ -2,7 +2,15 @@
 
 set -eu
 
+APPDIR="$HOME/.local/opt/cursor"
+DMGIMAGE_URL=$(curl -sL https://www.cursor.com/api/download\?platform\=darwin-arm64\&releaseTrack\=stable | jq -r '.downloadUrl')
+mkdir -p "$APPDIR"
+curl -LO "$DMGIMAGE_URL"
+
+exit 0
+
 sudo apt install -y dbus-x11 libfuse2 jq
+
 
 APPDIR="$HOME/.local/opt/cursor"
 APPIMAGE_URL=$(curl -sL https://www.cursor.com/api/download\?platform\=linux-x64\&releaseTrack\=stable | jq -r '.downloadUrl')

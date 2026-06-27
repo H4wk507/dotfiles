@@ -2,4 +2,12 @@
 
 set -eu
 
+# ubuntu
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/mkasberg/ghostty-ubuntu/HEAD/install.sh)"
+
+# macos
+# TODO:
+
+
+mkdir -p "$HOME/.config/ghostty/themes/"
+curl -Lo "$HOME/.config/ghostty/themes/catppuccin-macchiato" "https://raw.githubusercontent.com/catppuccin/ghostty/refs/heads/main/themes/catppuccin-macchiato.conf"
