@@ -6,7 +6,6 @@ zsh
 zsh plugins
 ghostty
 vscode
-cursor
 tmux
 newsboat
 qbittorrent
@@ -20,10 +19,9 @@ opencode
 claude-code
 uv
 lm-studio
+mole
 
 thunderbird
-ghidra
-golang
 docker
 gimp
 clion
@@ -37,10 +35,11 @@ pnpm
 fnm
 stripe CLI
 datagrip
-supabase
 slack
 pulumi
 postman
 ngrok
+aws-vault
+trufflehog
 
 what about ssh keys?
