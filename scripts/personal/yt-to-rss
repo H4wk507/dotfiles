@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -euo pipefail
+
+[ "$#" -eq 0 ] && >&2 echo "Usage: $0 [CHANNELS...]" && exit 1
+
+for channel in "$@"; do
+    channel_name="$(echo "$channel" | sed -rn 's/.*@([^\/]*).*/\1/p')"
+    rss="$(curl -Ls "$channel" | sed -rn 's/.*\"RSS" href=\"([^"]*)\".*/\1/p')"
+    echo "$rss" \"yt\" \""$channel_name"\"
+done
+
+exit 0

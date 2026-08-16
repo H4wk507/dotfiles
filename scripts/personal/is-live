@@ -1,0 +1,51 @@
+#!/usr/bin/env python3
+
+"""Check if a user is currently live on Kick.com"""
+
+import sys
+from datetime import datetime, timedelta, timezone
+
+from curl_cffi import requests
+
+
+def check(username: str) -> None:
+    try:
+        res = requests.get(
+            f"https://kick.com/api/v1/channels/{username}",
+            impersonate="chrome110",
+        )
+        res.raise_for_status()
+        data = res.json()
+    except Exception as e:
+        print(f"Error checking {username}: {e}")
+        return
+
+    if data["is_banned"]:
+        print(f"{username} is banned!")
+        return
+
+    stream = data["livestream"]
+    if stream is None:
+        print(f"{username} is not live.")
+        return
+
+    start = datetime.strptime(stream["start_time"], "%Y-%m-%d %H:%M:%S").replace(
+        tzinfo=timezone.utc
+    )
+    uptime = timedelta(
+        seconds=int((datetime.now(timezone.utc) - start).total_seconds())
+    )
+    print(f"{username} is live\nUptime: {uptime}\nTitle: {stream['session_title']}")
+
+
+def main(argv=sys.argv) -> int:
+    if len(sys.argv) < 2:
+        print("Usage: is-live CHANNEL_NAME [CHANNEL_NAME...]")
+        return 1
+    for username in sys.argv[1:]:
+        check(username)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

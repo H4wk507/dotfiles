@@ -1,0 +1,105 @@
+#!/bin/sh
+
+# Remove Wolfram Mathematica completely from your system including all icons
+# and mime types. Works only on Unix-like systems.
+
+set -eu
+
+DRY_RUN="${DRY_RUN:-1}"
+
+root_uid=0
+if [ "$(id -u)" -ne "$root_uid" ]; then 
+  echo "Please rerun this script as root" >&2
+  exit 1
+fi
+
+target_user="${SUDO_USER:-$(id -un)}"
+user_home=$(getent passwd "$target_user" 2>/dev/null | cut -d: -f6)
+[ -z "$user_home" ] && user_home="${HOME:-/root}"
+
+if [ "$DRY_RUN" = 1 ]; then
+    echo "DRY_RUN=1. Set to 0 to actually remove files."
+else
+    echo "DRY_RUN=0. This will actually remove files."
+fi
+
+printf 'Proceed? [y/N] '
+read -r ans
+case "$ans" in
+    [Yy] | [Yy][Ee][Ss]) ;;
+    *) echo "Aborted."; exit 0 ;;
+esac
+
+rmv() {
+    if [ "$DRY_RUN" = 1 ]; then
+        for p in "$@"; do
+            { [ -e "$p" ] || [ -L "$p" ]; } && echo "[dry] rm -rf $p"
+        done
+        return 0
+    fi
+    rm -rfv "$@"
+}
+
+purge_dir() {
+    d=$1
+    [ -d "$d" ] || return 0
+    if [ "$DRY_RUN" = 1 ]; then
+        find "$d" \( -iname '*vnd.wolfram*' -o -iname 'wolfram-mathematica*' \
+            -o -iname 'wolfram-all*' \) -print 2>/dev/null \
+            | sed 's/^/[dry] rm -rf /'
+    else
+        find "$d" \( -iname '*vnd.wolfram*' -o -iname 'wolfram-mathematica*' \
+            -o -iname 'wolfram-all*' \) -exec rm -rfv {} + 2>/dev/null || true
+    fi
+}
+
+
+rmv "/usr/bin/wolframscript"
+rmv "/etc/alternatives/wolframscript" "/etc/alternatives/wolframscript.1"
+rmv "/usr/share/man/man1/wolframscript.1"
+rmv "/usr/share/doc/wolframscript"
+
+[ -L /etc/alternatives/wolframscript ] && [ ! -e /etc/alternatives/wolframscript ] \
+    && rmv "/etc/alternatives/wolframscript"
+
+rmv "/opt/Wolfram"
+rmv "/usr/local/Wolfram/"
+rmv "/usr/share/Mathematica/"
+rmv "/usr/share/WolframEngine/"
+
+for d in /usr/bin /usr/local/bin; do
+    for bin in Mathematica mathematica math wolfram WolframKernel \
+               wolframscript MathKernel mcc wolframplayer Wolfram WolframScript; do
+        rmv "$d/$bin"
+    done
+done
+
+rmv "/usr/share/man/man1/mathematica.1"
+
+rmv "/etc/profile.d/Mathematica.sh"
+rmv "/etc/xdg/menus/applications-merged/wolfram-all.menu"
+rmv "/usr/share/desktop-directories/wolfram-all.directory"
+rmv "/usr/share/mime/application/mathematica.xml"
+rmv /usr/share/applications/wolfram-mathematica*.desktop
+rmv /usr/local/share/applications/wolfram-mathematica*.desktop
+
+purge_dir /usr/share/icons
+purge_dir /usr/local/share/icons
+purge_dir /usr/share/mime
+purge_dir /usr/local/share/mime
+
+purge_dir "$user_home/.local/share/icons"
+purge_dir "$user_home/.local/share/mime"
+rmv "$user_home/.Mathematica/" "$user_home/.Wolfram/" "$user_home/.cache/Wolfram/"
+
+if [ "$DRY_RUN" != 1 ]; then
+    update-mime-database /usr/share/mime 2>/dev/null || true
+    update-mime-database "$user_home/.local/share/mime" 2>/dev/null || true
+    update-desktop-database /usr/share/applications 2>/dev/null || true
+    gtk-update-icon-cache /usr/share/icons/hicolor 2>/dev/null || true
+    gtk-update-icon-cache /usr/local/share/icons/hicolor 2>/dev/null || true
+    gtk-update-icon-cache "$user_home/.local/share/icons/hicolor" 2>/dev/null || true
+fi
+
+echo "Successfully run with DRY_RUN=$DRY_RUN."
+exit 0

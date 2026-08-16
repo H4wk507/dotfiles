@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Play music from the command-line.
+# $1 - optional directory with music files, defaults to $HOME/Music
+
+mpv --no-video --quiet --window-minimized=yes --shuffle \
+    "${1:-$HOME/Music}"/* 2> /dev/null

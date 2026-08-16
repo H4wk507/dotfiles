@@ -1,0 +1,6 @@
+#!/bin/sh
+
+
+find "${1:-.}" -name "*.js" | while read -r file; do
+   printf "// %s\n\n%s\n\n\n" "$file" "$(cat "$file")"
+done | xclip -sel clip

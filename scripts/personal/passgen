@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# Generate a random password
+
+set -eu
+
+n=1
+length=16
+while [ $# -gt 0 ]; do
+    case "$1" in
+        -n)          n="${2:?-n requires a value}"; shift 2 ;;
+        -l|--length) length="${2:?-l requires a value}"; shift 2 ;;
+        -*)          echo "Unknown option '$1'" >&2; exit 1 ;;
+        *)           echo "Unexpected argument '$1'" >&2; exit 1 ;;
+    esac
+done
+
+charset='a-zA-Z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_`{|}~'
+charset_length=$((26+26+10+32))
+printf 'Password generation algorithm has an entropy of %.0f bits.\nPassword length: %d\n' \
+    "$(echo "$length * l($charset_length) / l(2)" | bc -l)" "$length"
+
+printf "\nGenerating sample %d password(s) ...\n" "$n"
+for _ in $(seq "$n"); do
+    tr -dc "$charset" < /dev/urandom | head -c "$length"; echo ''
+done
+
+exit 0

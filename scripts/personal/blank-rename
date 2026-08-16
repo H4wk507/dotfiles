@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Iterate through all files in the current directory recursively, and rename
+# them, changing all spaces to hyphens.
+
+set -euo pipefail
+
+verbose=false
+for arg in "$@"; do
+    case $arg in
+        -v|--verbose)
+            verbose=true
+            shift
+            ;;
+    esac
+done
+
+find . -type f -print0 |
+while IFS= read -r -d '' filepath; do
+    new_filename=$(basename "$filepath" | tr -s ' ' | tr ' ' '-')
+    new_filepath="$(dirname "$filepath")/$new_filename"
+    if [ "$verbose" = true ]; then
+        mv -vf "$filepath" "$new_filepath" 2> /dev/null
+    else
+        mv -f "$filepath" "$new_filepath" 2> /dev/null
+    fi
+done
+
+exit 0
