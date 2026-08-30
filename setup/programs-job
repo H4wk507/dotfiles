@@ -1,0 +1,13 @@
+tap "stripe/stripe-cli"
+tap "pulumi/tap"
+
+brew "pnpm"
+brew "stripe/stripe-cli/stripe"
+brew "pulumi/tap/pulumi"
+brew "aws-vault"
+brew "trufflehog"
+
+cask "ngrok"
+cask "datagrip"
+cask "postman"
+cask "slack"

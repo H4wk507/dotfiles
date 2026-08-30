@@ -5,4 +5,6 @@ theme = catppuccin-macchiato
 
 shell-integration-features = no-cursor,no-sudo,no-title
 
-# font-family = "CommitMono"
+font-family = JetBrainsMono Nerd Font
+
+macos-option-as-alt = true

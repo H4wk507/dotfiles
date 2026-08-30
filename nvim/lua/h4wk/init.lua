@@ -1,2 +1,5 @@
-require("h4wk.set")
-require("h4wk.remap")
+require("h4wk.options")
+require("h4wk.keymaps")
+require("h4wk.plugins")
+require("h4wk.lsp")
+require("h4wk.autocmds")

@@ -1,66 +1,156 @@
 set nocompatible
-set history=1000
+let mapleader = ","
 
-filetype on
+source $VIMRUNTIME/defaults.vim
+
+augroup vimStartup | au! | augroup END
+
+set history=1000
 filetype plugin indent on
-syntax on
+syntax enable
+
+set hidden
+set confirm
+set lazyredraw
+set updatetime=300
 
 set shiftwidth=4
 set shiftround
 set tabstop=4
 set softtabstop=4
 set expandtab
+set autoindent
 
-set relativenumber
 set number
+set relativenumber
+set signcolumn=yes
+set splitbelow
+set splitright
+set scrolloff=5
+set sidescrolloff=8
+set wildmenu
+set wildmode=longest:full,full
+set wildignore+=*/.git/*,*/node_modules/*,*/__pycache__/*,*.pyc,*.o,*.so
 
 set ignorecase
 set smartcase
 set incsearch
+set hlsearch
+nnoremap <silent> <leader>h :nohlsearch<CR>
 
-set autoindent
-set autochdir
-set termguicolors
-autocmd FileType json setlocal ts=2 sts=2 sw=2
+set path+=**
+nnoremap <leader>cd :lcd %:h<CR>:pwd<CR>
+if executable('rg')
+    set grepprg=rg\ --vimgrep\ --smart-case
+    set grepformat=%f:%l:%c:%m
+endif
 
-function GitDiff()
-    :silent write
-    :silent execute '!git diff --color=always -- ' . expand('%:p') . ' | less --RAW-CONTROL-CHARS'
-    :redraw!
-endfunction
+for s:dir in ['undo', 'swap', 'backup']
+    if !isdirectory(expand('~/.vim/' . s:dir))
+        call mkdir(expand('~/.vim/' . s:dir), 'p', 0700)
+    endif
+endfor
 
-" restore cursor position
+set undofile
+set undodir=~/.vim/undo//
+set directory=~/.vim/swap//
+set backupdir=~/.vim/backup//
+set backup
+set nowritebackup
+
+if has('termguicolors')
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    set termguicolors
+endif
+
+augroup transparent_bg | au!
+    au ColorScheme * hi Normal     guibg=NONE ctermbg=NONE
+    au ColorScheme * hi NonText    guibg=NONE ctermbg=NONE
+    au ColorScheme * hi SignColumn guibg=NONE ctermbg=NONE
+augroup END
+
+augroup filetype_settings | au!
+    au FileType json,yaml,html,css,scss,javascript,typescript,vim
+                \ setlocal ts=2 sts=2 sw=2
+    au FileType gitcommit setlocal spell textwidth=72
+    au FileType markdown  setlocal spell textwidth=80
+augroup END
+
 augroup restore_pos | au!
     au BufWinEnter *
                 \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
                 \ |   exe 'normal! g`"zz'
                 \ | endif
-augroup end
+augroup END
 
-let mapleader = ","
-nnoremap <leader>gd :call GitDiff()<cr>
-nnoremap <F9> :Black<CR>
-noremap <leader>y "+y
-noremap <leader>p "+p
-let g:black_linelength="79"
+function! GitDiff() abort
+    if !executable('git')
+        echohl ErrorMsg | echo 'git is not installed' | echohl None
+        return
+    endif
+    silent write
+    execute 'terminal ++close git diff --color=always -- ' . shellescape(expand('%:p'))
+endfunction
 
-" Install vimplug
-let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
-if empty(glob(data_dir . '/autoload/plug.vim'))
-  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+function! StripTrailingWhitespace() abort
+    let l:view = winsaveview()
+    keeppatterns %s/\s\+$//e
+    call winrestview(l:view)
+endfunction
+
+nnoremap <leader>gd :call GitDiff()<CR>
+nnoremap <leader>w  :call StripTrailingWhitespace()<CR>
+nnoremap <leader>ev :edit $MYVIMRC<CR>
+nnoremap <leader>sv :source $MYVIMRC<CR>
+
+if has('clipboard')
+    nnoremap <leader>y "+y
+    xnoremap <leader>y "+y
+    nnoremap <leader>Y "+y$
+    nnoremap <leader>p "+p
+    xnoremap <leader>p "+p
+    nnoremap <leader>P "+P
 endif
 
-" Vim plugins
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+nnoremap <leader>co :copen<CR>
+nnoremap <leader>cc :cclose<CR>
+nnoremap ]q :cnext<CR>
+nnoremap [q :cprevious<CR>
+
+nnoremap ]b :bnext<CR>
+nnoremap [b :bprevious<CR>
+nnoremap <leader>b :ls<CR>:buffer<Space>
+
+xnoremap < <gv
+xnoremap > >gv
+
+if empty(glob('~/.vim/autoload/plug.vim'))
+    if executable('curl')
+        silent execute '!curl -fLo ~/.vim/autoload/plug.vim --create-dirs'
+                    \ 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+        autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    else
+        echohl WarningMsg | echo 'curl missing - vim-plug not installed' | echohl None
+    endif
+endif
+
 call plug#begin('~/.vim/plugged')
 
 Plug 'catppuccin/vim', { 'as': 'catppuccin' }
-Plug 'preservim/nerdtree'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'ambv/black'
+Plug 'preservim/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
 
 call plug#end()
 
-colorscheme catppuccin_mocha
-hi Normal guibg=NONE ctermbg=NONE
+nnoremap <leader>n :NERDTreeToggle<CR>
+nnoremap <leader>f :NERDTreeFind<CR>
+let g:NERDTreeShowHidden = 1
+let g:NERDTreeMinimalUI = 1
+let g:NERDTreeIgnore = ['\.pyc$', '^__pycache__$', '^\.git$', '^node_modules$']
+
+silent! colorscheme catppuccin_macchiato

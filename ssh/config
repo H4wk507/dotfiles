@@ -1,10 +1,9 @@
+Host *
+	IdentityAgent ~/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
+
 Host vm vmroot
     HostName localhost
     Port 2222
-    IdentityFile ~/.ssh/id_ed25519
-    KexAlgorithms +diffie-hellman-group1-sha1
-    HostKeyAlgorithms +ssh-rsa
-    Ciphers +aes128-cbc
 
 Host vm
     User user
