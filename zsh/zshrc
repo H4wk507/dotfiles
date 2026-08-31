@@ -1,4 +1,5 @@
 _is_linux() { [[ $OSTYPE == linux*  ]] }
+_is_macos() { [[ $OSTYPE == darwin* ]] }
 
 typeset -U path PATH
 path=(
@@ -76,12 +77,63 @@ zstyle ':completion:*' menu yes select
 
 # Functions
 
+# Get password from KeePassXC securely
 function kpget() {
     [[ -n $KP_PASS ]] || { IFS= read -rs "KP_PASS?KeePassXC master pass: "; print -u2 }
     local v
     v=$(print -r -- "$KP_PASS" | keepassxc-cli show -q -s -a Password "$HOME/Passwords.kdbx" "$1") || { unset KP_PASS; return 1 }
     [[ -n $v ]] || { print -u2 "kpget: empty '$1'"; return 1 }
     print -r -- "$v"
+}
+
+# Claude Code + Remote Control
+function cw() {
+    local name="${1:-${PWD:t}}"
+
+    local -a cmd=(
+        env -u ANTHROPIC_API_KEY -u ANTHROPIC_BASE_URL
+        -u DISABLE_TELEMETRY -u DO_NOT_TRACK
+        -u DISABLE_GROWTHBOOK -u CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC
+        -u CLAUDE_CODE_OAUTH_TOKEN
+        claude --permission-mode acceptEdits --remote-control "$name" "$@"
+    )
+
+    if _is_macos; then
+        caffeinate -ims "${cmd[@]}"
+    else
+        "${cmd[@]}"
+    fi
+}
+
+# OpenCode Web + Remote Control via Tailscale
+function ocw() {
+    local port=4096
+    local pwfile="$HOME/.config/opencode/server-password"
+
+    if [[ ! -f $pwfile ]]; then
+        mkdir -p ${pwfile:h}
+        openssl rand -base64 8 | tr -d '\n' > $pwfile
+        chmod 600 $pwfile
+    fi
+
+    command -v tailscale >/dev/null || { print -u2 "tailscale not found"; return 1 }
+    command -v jq >/dev/null || { print -u2 "jq not found"; return 1 }
+
+    local pw="$(<$pwfile)"
+    export OPENCODE_SERVER_PASSWORD="$pw"
+
+    opencode web --hostname 127.0.0.1 --port $port &
+    local pid=$!
+
+    trap "kill $pid 2>/dev/null; tailscale serve --https=443 off >/dev/null 2>&1; unset OPENCODE_SERVER_PASSWORD" EXIT INT TERM
+
+    _is_macos && caffeinate -imsw $pid &
+
+    tailscale serve --bg --https=443 "http://127.0.0.1:${port}" >/dev/null || return 1
+
+    local host=${$(tailscale status --json | jq -r '.Self.DNSName')%.}
+    print -P "%F{green}→%f https://${host}/   user: opencode   password: ${pw}"
+    wait $pid
 }
 
 # List packages
@@ -211,7 +263,8 @@ alias \
 
 alias \
     encrypt-file='gpg -c --no-symkey-cache --pinentry-mode=loopback' \
-    decrypt-file='gpg -d --no-symkey-cache --pinentry-mode=loopback'
+    decrypt-file='gpg -d --no-symkey-cache --pinentry-mode=loopback' \
+    tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
