@@ -105,6 +105,8 @@ function cw() {
     fi
 }
 
+alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+
 # OpenCode Web + Remote Control via Tailscale
 function ocw() {
     local port=4096
@@ -263,8 +265,7 @@ alias \
 
 alias \
     encrypt-file='gpg -c --no-symkey-cache --pinentry-mode=loopback' \
-    decrypt-file='gpg -d --no-symkey-cache --pinentry-mode=loopback' \
-    tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+    decrypt-file='gpg -d --no-symkey-cache --pinentry-mode=loopback'
 
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
