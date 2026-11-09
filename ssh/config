@@ -1,3 +1,10 @@
+Include ~/.orbstack/ssh/config
+
+Host git.gorrion.pl
+    IdentityAgent none
+    IdentityFile ~/.ssh/id_ed25519_gorrion
+    IdentitiesOnly yes
+
 Host *
 	IdentityAgent ~/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
 
