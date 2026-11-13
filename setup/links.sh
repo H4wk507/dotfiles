@@ -9,7 +9,7 @@ esac
 
 basedir=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 
-mkdir -p "$HOME/.config" "$HOME/.agents" "$HOME/.local/bin" "$HOME/.cache/zsh"
+mkdir -p "$HOME/.config" "$HOME/.config/borgmatic" "$HOME/.agents" "$HOME/.local/bin" "$HOME/.cache/zsh"
 mkdir -p "$HOME/.ssh" && chmod 700 "$HOME/.ssh"
 
 link() {
@@ -36,17 +36,18 @@ link() {
     echo "link  $dest -> $src"
 }
 
-link bash/bashrc       "$HOME/.bashrc"
-link bash/profile      "$HOME/.profile"
-link git/gitconfig     "$HOME/.gitconfig"
-link git/gitconfig-job "$HOME/.gitconfig-job"
-link vim/vimrc         "$HOME/.vimrc"
-link zsh/zshrc         "$HOME/.zshrc"
-link zsh/zsh           "$HOME/.zsh"
-link tmux/tmux.conf    "$HOME/.tmux.conf"
-link ssh/config        "$HOME/.ssh/config"
-link newsboat          "$HOME/.newsboat"
-link nvim              "$HOME/.config/nvim"
-link ghostty           "$HOME/.config/ghostty"
-link skills            "$HOME/.agents/skills"
-link bin               "$HOME/bin"
+link bash/bashrc        "$HOME/.bashrc"
+link bash/profile        "$HOME/.profile"
+link git/gitconfig       "$HOME/.gitconfig"
+link git/gitconfig-job   "$HOME/.gitconfig-job"
+link vim/vimrc          "$HOME/.vimrc"
+link zsh/zshrc          "$HOME/.zshrc"
+link zsh/zsh            "$HOME/.zsh"
+link tmux/tmux.conf     "$HOME/.tmux.conf"
+link ssh/config          "$HOME/.ssh/config"
+link newsboat           "$HOME/.newsboat"
+link nvim               "$HOME/.config/nvim"
+link ghostty            "$HOME/.config/ghostty"
+link skills             "$HOME/.agents/skills"
+link bin                "$HOME/bin"
+link backups/config.yaml "$HOME/.config/borgmatic/config.yaml"

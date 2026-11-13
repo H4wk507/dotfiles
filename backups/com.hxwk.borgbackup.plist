@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+"http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+<key>Label</key>
+<string>com.hxwk.borgbackup</string>
+
+<key>ProgramArguments</key>
+<array>
+<string>/usr/local/bin/borg-wrapper</string>
+</array>
+
+<key>StartCalendarInterval</key>
+<dict>
+<key>Hour</key><integer>3</integer>
+<key>Minute</key><integer>30</integer>
+</dict>
+
+<key>RunAtLoad</key>
+<false/>
+
+<key>StandardOutPath</key>
+<string>/var/log/borgbackup.log</string>
+<key>StandardErrorPath</key>
+<string>/var/log/borgbackup.log</string>
+
+<key>EnvironmentVariables</key>
+<dict>
+<key>PATH</key>
+<string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+</dict>
+
+<key>LowPriorityIO</key>
+<true/>
+<key>Nice</key>
+<integer>5</integer>
+</dict>
+</plist>

@@ -81,7 +81,7 @@ zstyle ':completion:*' menu yes select
 function kpget() {
     [[ -n $KP_PASS ]] || { IFS= read -rs "KP_PASS?KeePassXC master pass: "; print -u2 }
     local v
-    v=$(print -r -- "$KP_PASS" | keepassxc-cli show -q -s -a Password "$HOME/Passwords.kdbx" "$1") || { unset KP_PASS; return 1 }
+    v=$(print -r -- "$KP_PASS" | keepassxc-cli show -q -s -a Password "$HOME/Sync/keepassxc/Passwords.kdbx" "$1") || { unset KP_PASS; return 1 }
     [[ -n $v ]] || { print -u2 "kpget: empty '$1'"; return 1 }
     print -r -- "$v"
 }
@@ -254,9 +254,9 @@ alias \
 alias \
     cl='clear' \
     cls='clear' \
-    ytmp4='yt-dlp -f bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' \
+    yt4k='yt-dlp -f "bv*+ba/b" -S "res:2160" --merge-output-format mkv' \
+    ytmp4='yt-dlp -S "vcodec:h264,res,acodec:m4a" --merge-output-format mp4' \
     ytflac='yt-dlp --extract-audio --audio-format flac' \
-    ytwebm='yt-dlp -f "bv*[height<=720]+ba/b[height<=720] / wv*+ba/w"' \
     ytplflac='yt-dlp -f "bestaudio/best" -ciw -o "%(title)s.%(ext)s" --extract-audio --audio-format flac --yes-playlist' \
     nb='newsboat' \
     e='$EDITOR' \

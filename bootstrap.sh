@@ -54,6 +54,7 @@ cat <<'MSG'
 Done. Left to do by hand:
   - chsh -s /opt/homebrew/bin/zsh   to use the brew zsh over the system one
   - configure Secretive SSH keys
+  - backups: sudo backups/install.sh, then read backups/README.md
   - open nvim once; vim.pack installs from nvim/nvim-pack-lock.json and
     mason installs the LSPs and formatters
 MSG

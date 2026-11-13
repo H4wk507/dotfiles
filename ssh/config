@@ -17,3 +17,10 @@ Host vm
 
 Host vmroot
     User root
+
+Host storagebox
+    HostName u672410.your-storagebox.de
+    User u672410
+    Port 23
+    IdentityFile ~/.ssh/id_ed25519_borg_hetzner
+    IdentitiesOnly yes

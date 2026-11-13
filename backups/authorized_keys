@@ -1,0 +1,1 @@
+command="borg-1.4 serve --restrict-to-repository /home/backups/mac --storage-quota 700G --umask=077",restrict ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ5RDTheewXRnA6H72oCZrdSEU/HXlOzYX2GpuW8k8UX borg-backup@Piotrs-MacBook-Pro

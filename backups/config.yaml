@@ -1,0 +1,92 @@
+local_path: /opt/homebrew/bin/borg
+remote_path: borg-1.4
+ssh_command: ssh -i /Users/hxwk/.ssh/id_ed25519_borg_hetzner -o IdentitiesOnly=yes -o UserKnownHostsFile=/Users/hxwk/.ssh/known_hosts -o BatchMode=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=6
+statistics: standard
+lock_wait: 60
+retries: 3
+retry_wait: 60
+
+source_directories:
+  - Users/hxwk
+
+working_directory: /private/tmp/borg-snap
+
+one_file_system: true
+
+repositories:
+  - path: ssh://u672410@u672410.your-storagebox.de:23/./backups/mac
+    label: hetzner
+  - path: /Volumes/External-Physical/borg-mac
+    label: external
+
+commands:
+  - before: repository
+    run:
+      - '[ "{repository_label}" != external ] || [ -d /Volumes/External-Physical/borg-mac/data ] || exit 75'
+
+encryption_passcommand: "/usr/bin/security find-generic-password -a borg -s borg-hetzner -w /Library/Keychains/System.keychain"
+
+compression: zstd,3
+
+exclude_caches: true
+exclude_if_present:
+  - .nobackup
+
+exclude_patterns:
+  - "**/Library/Caches"
+  - "**/Library/Containers/*/Data/Library/Caches"
+  - "**/.Trash"
+  - "**/node_modules"
+  - "**/target"
+  - "**/__pycache__"
+  - "**/.venv"
+  - "**/.lmstudio"
+  - "**/.omlx"
+  - "**/.turbo"
+  - "**/.build"
+  - "**/.hf-cli"
+  - "**/Library/Application Support/Steam"
+  - "**/Library/Developer/Xcode/DerivedData"
+  - "**/Library/Application Support/MobileSync"
+  - "**/Library/Caches/CloudKit"
+  - "**/.cache"
+  - "**/Library/Containers/com.docker.docker/Data/vms"
+  - "**/Library/Containers/com.docker.docker/Data/*.raw"
+  - "**/.docker/desktop"
+  - "**/Library/Group Containers/*.dev.orbstack"
+  - "**/Library/Mobile Documents"
+  - "**/Library/Developer/CoreSimulator"
+  - "**/.ollama/models"
+  - "**/Library/Group Containers/*/Library/Caches"
+  - "**/Library/Saved Application State"
+  - "**/Library/Logs"
+  - "**/.local/share/pnpm/store"
+  - "**/Library/pnpm/store"
+  - "**/.bun/install/cache"
+  - "**/.npm/_cacache"
+  - "**/.yarn/berry/cache"
+  - "**/.cargo/registry"
+  - "**/.rustup/toolchains"
+  - "**/go/pkg/mod"
+  - "**/nobackup"
+  # SIPs
+  - "**/Library/Biome"
+  - "**/Library/DuetExpertCenter"
+  - "**/Library/Daemon Containers"
+  - "**/Library/Metadata/CoreSpotlight"
+  - "**/Library/Group Containers/*/Caches"
+
+keep_daily: 7
+keep_weekly: 4
+keep_monthly: 12
+
+compact_threshold: 20
+
+checks:
+  - name: repository
+    frequency: 2 weeks
+  - name: archives
+    frequency: 1 month
+
+healthchecks:
+  ping_url: https://hc-ping.com/eed4f432-94c4-47ec-b5ae-bfd3ac5427a8
