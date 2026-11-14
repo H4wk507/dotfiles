@@ -147,7 +147,7 @@ echo "put backups/authorized_keys .ssh/authorized_keys" | sftp -P 23 u672410@u67
 After the first backup has run, check that restore works:
 
 ```bash
-sudo borgmatic --config ~/.config/borgmatic/config.yaml extract --archive latest --path /Users/hxwk/Passwords.kdbx --destination /tmp/restore
+sudo borgmatic --config ~/.config/borgmatic/config.yaml extract --archive latest --path Users/hxwk/Sync/keepassxc/Passwords.kdbx --destination /tmp/restore
 ```
 
 The file should be accessible.
@@ -222,7 +222,7 @@ This is the section that matters. Everything above is plumbing whose only purpos
 
 ### What you need that is not in the backup
 
-Three things. Lose all of them and the backup is a pile of random bytes.
+Three things. Lose them and the backup is a pile of random bytes.
 
 - The repo passphrase. In the password manager and offline on paper.
 - The paper key export. Only needed if the repo's own `config` file is damaged.
@@ -231,6 +231,29 @@ Three things. Lose all of them and the backup is a pile of random bytes.
   So the Hetzner credentials and 2FA recovery codes belong offline as well.
 
 The repo URL is not a secret and it sits in `config.yaml` in this repo, so that part you can always look up.
+
+All of it lives on one sheet of paper at home. That covers forgetting, but not being robbed or having the
+house burn down xD. So the full restore path should also work without depending on physical items kept in a
+single place.
+
+### Off-site copy of the password database
+
+Every password, including the backup encryption passphrases, lives in a password manager. A local-first
+password manager keeps all of them in a single encrypted file on disk, behind a passphrase that is memorised
+anyway.
+
+That one file should also sit in some cloud storage that can be reached with nothing but a remembered
+password, with no MFA. The file itself is strongly encrypted, so the security of the account holding it hardly
+matters; all we want from it is easy remote access without extra confirmation steps.
+
+I chose a free account at https://koofr.eu/, because it lets you log in with a password alone and asks for
+nothing else. The only thing kept there is the KeePassXC `Passwords.kdbx` file.
+
+If every physical copy is gone, we sign in there, download the KeePassXC file, decrypt it with the memorised
+passphrase, read out the 2FA codes and the backup passphrases, and get everything else back from there.
+
+Once a year, sign in from a different browser on a different network. That one act keeps the account alive,
+confirms Koofr has not started mailing codes after all, and rehearses the recovery path.
 
 ### Getting to a shell that has borg in it
 
